@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>Store</title>
+</head>
+<body class="bg-gray-100">
+
+  <%- include('navbar'); -%>
+
+  <div class="bg-white py-16 sm:py-4">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:max-w-7xl lg:px-4">
+      <h2 class="text-2xl font-bold tracking-tight text-gray-900">Products</h2>
+
+      <div class="mt-6 overflow-y-auto">
+        <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          <% data.forEach(product => { %>
+          <div class="group relative flex flex-col bg-white border border-gray-200 rounded-md shadow-md overflow-hidden">
+            <img src="<%= product.url %>" class="aspect-square w-full rounded-md bg-gray-200 object-cover lg:aspect-auto lg:h-80">
+            
+            <div class="mt-4 px-4 flex justify-between">
+              <div>
+                <h3 class="text-sm text-gray-700">
+                    <%= product.TITLE %>
+
+                </h3>
+                <p class="text-sm font-medium text-gray-900"><%= product.PRICE %> €</p>
+              </div>
+
+              <div class="mt-4 px-4 pb-4">
+                <button class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition duration-200 ease-in-out w-full" onclick="openEditModal('<%= product.ID %>', '<%= product.TITLE %>', '<%= product.PRICE %>', '<%= product.DESCRIPTION %>', '<%= product.url %>')">
+                  Edit
+                </button>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Editing -->
+  <div id="edit-modal" class="fixed inset-0 flex justify-center items-center bg-gray-500 bg-opacity-50 hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+      <h2 class="text-xl font-bold text-gray-900 mb-4">Edit Product</h2>
+      <div class="mb-4">
+        <label for="edit-title" class="block text-sm font-medium text-gray-700">Title</label>
+        <input type="text" id="edit-title" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm">
+      </div>
+      
+      <div class="mb-4">
+        <label for="edit-price" class="block text-sm font-medium text-gray-700">Price (€)</label>
+        <input type="number" id="edit-price" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm" min="0" step="any">
+      </div>
+
+      <div class="mb-4">
+        <label for="edit-url" class="block text-sm font-medium text-gray-700">Image URL</label>
+        <input type="url" id="edit-url" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm">
+      </div>
+
+      <div class="mb-4">
+        <label for="edit-description" class="block text-sm font-medium text-gray-700">Description</label>
+        <textarea id="edit-description" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm" rows="3"></textarea>
+      </div>
+
+      <div class="flex justify-between">
+        <button onclick="closeEditModal()" class="bg-gray-300 text-gray-700 px-4 py-2 rounded">Cancel</button>
+        <button onclick="submitEdit()" class="bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentProductId = null;
+
+    function openEditModal(id, title, price, description, url) {
+      console.log("Opening modal, product ID:", id);
+      currentProductId = id;
+      document.getElementById('edit-title').value = title;
+      document.getElementById('edit-price').value = price;
+      document.getElementById('edit-url').value = url;
+      document.getElementById('edit-description').value = description;
+
+      const modal = document.getElementById('edit-modal');
+      modal.classList.remove('hidden');
+      console.log("Modal opened.");
+    }
+
+    function closeEditModal() {
+      const modal = document.getElementById('edit-modal');
+      modal.classList.add('hidden');
+      console.log("Modal closed.");
+    }
+
+    function submitEdit() {
+      const updatedTitle = document.getElementById('edit-title').value;
+      const updatedPrice = document.getElementById('edit-price').value;
+      const updatedUrl = document.getElementById('edit-url').value;
+      const updatedDescription = document.getElementById('edit-description').value;
+
+      const updatedProduct = {
+        id: currentProductId,
+        title: updatedTitle,
+        price: updatedPrice,
+        url: updatedUrl,
+        description: updatedDescription
+      };
+
+      fetch('/adminproductchange', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedProduct),
+      });
+
+      closeEditModal();
+    }
+  </script>
+
+</body>
+</html>

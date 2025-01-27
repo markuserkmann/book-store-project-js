@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>Store</title>
+</head>
+<body class="bg-gray-100">
+
+  <%- include('navbar'); -%>
+
+  <div class="bg-white py-16 sm:py-4">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:max-w-7xl lg:px-4">
+      <h2 class="text-2xl font-bold tracking-tight text-gray-900">Products</h2>
+
+      <div class="mt-6 overflow-y-auto">
+        <div class="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          <% data.forEach(product => { %>
+          <div class="group relative flex flex-col bg-white border border-gray-200 rounded-md shadow-md overflow-hidden">
+            <img src="<%= product.url %>" class="aspect-square w-full rounded-md bg-gray-200 object-cover lg:aspect-auto lg:h-80">
+            
+            <div class="mt-4 px-4 flex justify-between">
+              <div>
+                <h3 class="text-sm text-gray-700">
+                    <%= product.TITLE %>
+                </h3>
+                <p class="text-sm font-medium text-gray-900"><%= product.PRICE %> €</p>
+              </div>
+
+              <div class="mt-4 px-4 pb-4">
+                <form action="/add-to-cart" method="POST">
+                  <input type="hidden" name="userId" value="1">
+                  <input type="hidden" name="productId" value="<%= product.ID %>">
+                  <button type="submit" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow transition duration-200 ease-in-out w-full">
+                    Add to Cart
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

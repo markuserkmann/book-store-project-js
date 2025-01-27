@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>Navbar Test</title>
+</head>
+<body>
+<nav class="bg-sky-900">
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div class="relative flex h-16 items-center justify-between">
+        <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+        </div>
+        <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+          <div class="hidden sm:ml-6 sm:block">
+            <div class="flex space-x-4">
+              <a href="/shop" class="tab-link rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-sky-800 hover:text-white" onclick="setActiveTab(event, 'Shop')">Shop</a>
+              <a href="/cart/1" class="tab-link rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-sky-800 hover:text-white" onclick="setActiveTab(event, 'Cart')">Cart</a>
+              <a href="/addproduct" class="tab-link rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-sky-800 hover:text-white" onclick="setActiveTab(event, 'Add Product')">Add Product</a>
+              <a href="/adminproducts" class="tab-link rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-sky-800 hover:text-white" onclick="setActiveTab(event, 'Admin Products')">Admin Products</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="sm:hidden" id="mobile-menu">
+      <div class="space-y-1 px-2 pb-3 pt-2">
+        <a href="/shop" class="block rounded-md bg-sky-950 px-3 py-2 text-base font-medium text-white" onclick="setActiveTab(event, 'Shop')">Shop</a>
+        <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-sky-700 hover:text-white" onclick="setActiveTab(event, 'Cart')">Cart</a>
+        <a href="#" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-sky-700 hover:text-white" onclick="setActiveTab(event, 'Add Product')">Add Product</a>
+        <a href="/adminproducts" class="block rounded-md px-3 py-2 text-base font-medium text-gray-300 hover:bg-sky-700 hover:text-white" onclick="setActiveTab(event, 'Admin Products')">Admin Products</a>
+      </div>
+    </div>
+  </nav>
+
+  <script>
+    function setActiveTab(event, tabName) {
+      const allTabs = document.querySelectorAll('.tab-link');
+      allTabs.forEach(tab => tab.classList.remove('bg-sky-950', 'text-white'));
+      
+      event.target.classList.add('bg-sky-950', 'text-white');
+    }
+
+    window.addEventListener('DOMContentLoaded', (event) => {
+      const currentPath = window.location.pathname;
+      const allTabs = document.querySelectorAll('.tab-link');
+      
+      allTabs.forEach(tab => {
+        const tabHref = tab.getAttribute('href');
+        if (currentPath === tabHref) {
+          tab.classList.add('bg-sky-950', 'text-white');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
